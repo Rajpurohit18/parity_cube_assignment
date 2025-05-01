@@ -1,0 +1,19 @@
+current directory: /home/vikas/parity_Assignment/Dockerrizedrails/hello_app/vendor/bundle/ruby/3.2.0/gems/debug-1.10.0/ext/debug
+/home/vikas/.local/share/mise/installs/ruby/3.2.3/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /home/vikas/parity_Assignment/Dockerrizedrails/hello_app/vendor/bundle/ruby/3.2.0/gems/debug-1.10.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20250501-101523-zburgu sitelibdir\=./.gem.20250501-101523-zburgu clean
+
+current directory: /home/vikas/parity_Assignment/Dockerrizedrails/hello_app/vendor/bundle/ruby/3.2.0/gems/debug-1.10.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20250501-101523-zburgu sitelibdir\=./.gem.20250501-101523-zburgu
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.so
+
+current directory: /home/vikas/parity_Assignment/Dockerrizedrails/hello_app/vendor/bundle/ruby/3.2.0/gems/debug-1.10.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20250501-101523-zburgu sitelibdir\=./.gem.20250501-101523-zburgu install
+/usr/bin/install -c -m 0755 debug.so ./.gem.20250501-101523-zburgu/debug
+
+current directory: /home/vikas/parity_Assignment/Dockerrizedrails/hello_app/vendor/bundle/ruby/3.2.0/gems/debug-1.10.0/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20250501-101523-zburgu sitelibdir\=./.gem.20250501-101523-zburgu clean

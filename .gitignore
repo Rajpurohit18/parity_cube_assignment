@@ -1,0 +1,7 @@
+/home/vikas/parity_Assignment/Dockerrizedrails/hello_app/vendor/
+/.bundle/
+/.git/
+/tmp/
+/log/
+/public/assets/
+.ruby-version

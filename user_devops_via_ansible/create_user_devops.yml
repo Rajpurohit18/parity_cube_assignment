@@ -1,0 +1,53 @@
+---
+- name: Create SSH key for devops user
+  hosts: 192.168.244.129  # Target server IP
+  become: yes
+  tasks:
+    - name: Generate SSH key for vikas user
+      user:
+        name: vikas
+        shell: /bin/bash
+
+    - name: Create the .ssh directory for devops user
+      file:
+        path: /home/devops/.ssh
+        state: directory
+        mode: '0700'
+        owner: devops
+        group: devops
+
+    - name: Copy public key to authorized_keys
+      copy:
+        content: "{{ lookup('file', '/home/vikas/.ssh/id_rsa.pub') }}"
+        dest: /home/devops/.ssh/authorized_keys
+        mode: '0600'
+        owner: devops
+        group: devops
+
+    - name: Set ownership of .ssh directory for devops user
+      file:
+        path: /home/devops/.ssh
+        state: directory
+        owner: devops
+        group: devops
+        mode: '0700'
+
+    - name: Set permissions on authorized_keys
+      file:
+        path: /home/devops/.ssh/authorized_keys
+        mode: '0600'
+        owner: devops
+        group: devops
+
+    - name: Ensure password authentication is disabled for devops user
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+      notify: Restart SSH
+
+  handlers:
+    - name: Restart SSH
+      service:
+        name: ssh
+        state: restarted

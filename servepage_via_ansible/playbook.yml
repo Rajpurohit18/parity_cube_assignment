@@ -1,0 +1,47 @@
+---
+- name: Deploy a Static Website using Nginx
+  hosts: 192.168.244.129
+  become: yes  # Run tasks as root
+
+  tasks:
+    - name: Ensure Nginx is installed
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+      register: nginx_install
+      retries: 3
+      delay: 5
+      until: nginx_install is succeeded
+
+    - block:
+        - name: Copy the custom index.html file
+          copy:
+            src: files/index.html  # Your local HTML file
+            dest: /var/www/html/index.html
+            owner: www-data
+            group: www-data
+            mode: '0644'
+          notify:
+            - Restart Nginx
+
+        - name: Ensure Nginx service is started and enabled
+          systemd:
+            name: nginx
+            state: started
+            enabled: yes
+
+      rescue:
+        - name: Rollback Nginx configuration changes
+          command: systemctl restart nginx
+          ignore_errors: yes
+
+        - name: Log failure message
+          debug:
+            msg: "An error occurred, and the Nginx configuration changes were rolled back."
+
+      always:
+        - name: Ensure Nginx is running
+          systemd:
+            name: nginx
+            state: started

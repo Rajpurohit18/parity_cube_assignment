@@ -1,0 +1,46 @@
+---
+- name: Create 'devops' user on localhost
+  hosts: servers
+  become: yes
+
+  vars:
+    user_name: devops
+    ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCEXAMPLEKEY12345678 devops@ansible.com"
+
+  tasks:
+    - name: Create devops user
+      user:
+        name: "{{ user_name }}"
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+        create_home: yes
+
+    - name: Create .ssh directory
+      file:
+        path: "/home/{{ user_name }}/.ssh"
+        state: directory
+        owner: "{{ user_name }}"
+        group: "{{ user_name }}"
+        mode: '0700'
+
+    - name: Add public key to authorized_keys
+      copy:
+        content: "{{ ssh_key }}"
+        dest: "/home/{{ user_name }}/.ssh/authorized_keys"
+        owner: "{{ user_name }}"
+        group: "{{ user_name }}"
+        mode: '0600'
+
+    - name: Ensure PasswordAuthentication is disabled
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+        state: present
+        backup: yes
+
+    - name: Restart SSH service
+      service:
+        name: ssh
+        state: restarted
